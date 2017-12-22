@@ -1,6 +1,6 @@
 # data_challenge_Via
 
-**Question in Docx** &nbsp
+**Question in Docx** 
 
 **Data in Excel**
 

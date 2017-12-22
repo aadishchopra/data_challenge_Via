@@ -1,0 +1,145 @@
+---
+title: "Via"
+author: "Aadish Chopra"
+date: "December 20, 2017"
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+# Analysis done for Via
+
+
+```{r setup, include=FALSE, cache=TRUE,autodep=TRUE,warning=FALSE,message=FALSE,results='asis'}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Importing the dataset in  R
+
+## R Markdown
+```{r}
+library(readxl)
+Via_ <- read_excel("D:/UIC/Interviews/Via .xlsx", 
+    col_types = c("text", "text", "date"))
+Via_<-Via_[complete.cases(Via_),]
+
+```
+
+
+###Exploratory Analysis
+
+Calculating how many agents are there ?
+
+```{r  }
+library(knitr)
+No_of_accounts_manager<-length(unique(Via_$`Account manager`))
+Names_of_accounts_manager<-as.data.frame(unique(Via_$`Account manager`))
+colnames(Names_of_accounts_manager)<-"Names"
+kable(Names_of_accounts_manager)
+
+```
+
+Calculating how many different clients are there ?
+
+```{r eval=FALSE}
+
+No_of_unique_clients<-length(unique((Via_$`Client Name`)))
+No_of_unique_clients
+
+
+```
+
+We can see that there are 4 different accounts manager and 25 different clients
+
+Now we will see how many account manager have handled different clients
+
+```{r warning=FALSE,message=FALSE}
+library("ggplot2")
+g1<-ggplot(data=Via_)+
+geom_bar(aes(x=Via_$`Account manager`,fill=Via_$`Client Name`))
+
+plot(g1)
+
+
+
+```
+
+
+
+
+```{r}
+library("dplyr")
+#??? scope of improvement of code ???
+ 
+Milan_Crona<-Via_[Via_$`Account manager`==Names_of_accounts_manager[1,],]
+  
+FMilanCrona<-as.data.frame(sort(table(Milan_Crona$`Client Name`),decreasing=TRUE))
+colnames(FMilanCrona)<-"MCClient Name"
+    
+Aidan_Pouros<-Via_[Via_$`Account manager`==Names_of_accounts_manager[2,],]
+  
+FAidan_Pouros<-as.data.frame(sort(table(Aidan_Pouros$`Client Name`),decreasing=TRUE))
+colnames(FAidan_Pouros)<-"APClient Name"
+
+Chauncey_Dach<-Via_[Via_$`Account manager`==Names_of_accounts_manager[3,],]
+  
+FChauncey_Dach<-as.data.frame(sort(table(Chauncey_Dach$`Client Name`),decreasing=TRUE))
+colnames(FChauncey_Dach)<-"CDClient Name"
+
+Rigoberto_White<-Via_[Via_$`Account manager`==Names_of_accounts_manager[4,],]
+  
+FRigoberto_White<-as.data.frame(sort(table(Rigoberto_White$`Client Name`),decreasing=TRUE))
+colnames(FRigoberto_White)<-"RWClient Name"
+
+kable(FMilanCrona)
+
+kable(FAidan_Pouros)
+
+kable(FChauncey_Dach)
+
+kable(FRigoberto_White)
+
+```
+
+From the above tables we can get information such as which client met with which 
+
+```{r warning=FALSE,message=FALSE}
+
+library(lubridate)
+
+Y2013<-(subset(Via_, format(Via_$`Date of Contact`,"%Y")==2013))
+Y2014<-(subset(Via_, format(Via_$`Date of Contact`,"%Y")==2014))
+Y2015<-(subset(Via_, format(Via_$`Date of Contact`,"%Y")==2015))
+Y2016<-(subset(Via_, format(Via_$`Date of Contact`,"%Y")==2016))
+Y2017<-(subset(Via_, format(Via_$`Date of Contact`,"%Y")==2016))
+  
+M2013<-as.data.frame(sort(table(lubridate::month(Y2013$`Date of Contact`)),decreasing = T))
+
+colnames(M2013)<-c("Month","Frequency")
+M2014<-as.data.frame(sort(table(lubridate::month(Y2014$`Date of Contact`)),decreasing = T))
+colnames(M2014)<-c("Month","Frequency")
+M2015<-as.data.frame(sort(table(lubridate::month(Y2015$`Date of Contact`)),decreasing = T))
+colnames(M2015)<-c("Month","Frequency")
+M2016<-as.data.frame(sort(table(lubridate::month(Y2016$`Date of Contact`)),decreasing = T))
+colnames(M2016)<-c("Month","Frequency")
+M2017<-as.data.frame(sort(table(lubridate::month(Y2017$`Date of Contact`)),decreasing = T))
+colnames(M2017)<-c("Month","Frequency")
+
+kable(M2013)
+kable(M2014)
+kable(M2015)
+kable(M2016)
+kable(M2017)
+
+```
+
+
+#From this we know that most of times agents contacted in the Month of October in all the years
+
+
+
+
+
+
+
